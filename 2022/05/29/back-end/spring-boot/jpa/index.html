@@ -1,0 +1,742 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="cuifuan">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="前言JPA 一种规范，并非ORM框架，也就是ORM上统一的规范。 今天学习的是 spring-data-jpa，与 Mybatis 类似。根本上都是用来在 Java 中用来操作数据库的，不是比 Mybatis 强，也不比 Mybatis 弱，各有各的好处。 那就有人要说了，那我为啥要再去学 JPA，而不直接接着用 Mybatis。其实 JPA 技术的核心在于便捷开发，可以直接通过实体字段映射表字段">
+<meta property="og:type" content="article">
+<meta property="og:title" content="崔先生的笔记">
+<meta property="og:url" content="https://cuifuan.github.io/2022/05/29/back-end/spring-boot/jpa/index.html">
+<meta property="og:site_name" content="崔先生的笔记">
+<meta property="og:description" content="前言JPA 一种规范，并非ORM框架，也就是ORM上统一的规范。 今天学习的是 spring-data-jpa，与 Mybatis 类似。根本上都是用来在 Java 中用来操作数据库的，不是比 Mybatis 强，也不比 Mybatis 弱，各有各的好处。 那就有人要说了，那我为啥要再去学 JPA，而不直接接着用 Mybatis。其实 JPA 技术的核心在于便捷开发，可以直接通过实体字段映射表字段">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2Nkbi5ubGFyay5jb20veXVxdWUvMC8yMDIwL3BuZy82MzEyNDIvMTU5MDA0ODU1MjQ2Mi04YmI3MTZkZC1jYmU0LTQ1ZTUtOThjMC1lZjc4ZmQ1OTM2NmIucG5n?x-oss-process=image/format,png#align=left&display=inline&height=873&margin=[objectObject]&name=image.png&originHeight=1746&originWidth=3354&size=419283&status=done&style=none&width=1677">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2Nkbi5ubGFyay5jb20veXVxdWUvMC8yMDIwL3BuZy82MzEyNDIvMTU5MDA1NTgyNTE3My1hNDEwMTY0MS1hYWZlLTQ4NDUtODJhZC05MmY3MDhjZGNiODUucG5n?x-oss-process=image/format,png#align=left&display=inline&height=747&margin=[objectObject]&name=image.png&originHeight=1494&originWidth=838&size=216173&status=done&style=none&width=419">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL3d4NC5zaW5haW1nLmNuL2xhcmdlL2QxZGI5ZmQzZ3kxZnhsa3FtYTJiNWoyMXdxMWhtZHpoLmpwZw?x-oss-process=image/format,png#align=left&display=inline&height=1930&margin=[objectObject]&originHeight=1930&originWidth=2474&status=done&style=none&width=2474">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2Nkbi5ubGFyay5jb20veXVxdWUvMC8yMDIwL3BuZy82MzEyNDIvMTU5MDA1Njg2MTIwNi1kMTBhMjcxYi04M2MzLTQyOTEtYjI1ZS1jMDIzZTYwZjI3N2QucG5n?x-oss-process=image/format,png#align=left&display=inline&height=379&margin=[objectObject]&name=image.png&originHeight=758&originWidth=3272&size=213930&status=done&style=none&width=1636">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL3d4NC5zaW5haW1nLmNuL2xhcmdlL2QxZGI5ZmQzZ3kxZnhsbXZlb3EweWoyMXZ3MTl3YWpoLmpwZw?x-oss-process=image/format,png#align=left&display=inline&height=1652&margin=[objectObject]&originHeight=1652&originWidth=2444&status=done&style=none&width=2444">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2Nkbi5ubGFyay5jb20veXVxdWUvMC8yMDIwL3BuZy82MzEyNDIvMTU5MDA1NjkyNzc2Ni1kNmY2Njg0OC0xYjFhLTQ0YjUtYWEyMS1iYzJmZTNiZWM1NmIucG5n?x-oss-process=image/format,png#align=left&display=inline&height=879&margin=[objectObject]&name=image.png&originHeight=1758&originWidth=1340&size=593382&status=done&style=none&width=670">
+<meta property="og:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2Nkbi5ubGFyay5jb20veXVxdWUvMC8yMDIwL3BuZy82MzEyNDIvMTU5MDA1Njk5ODcwOC02NDViNmZlNy1jYmJhLTRmZWUtYTUyNi1mNDk3Y2JlODM3MmQucG5n?x-oss-process=image/format,png#align=left&display=inline&height=437&margin=[objectObject]&name=image.png&originHeight=874&originWidth=1850&size=192793&status=done&style=none&width=925">
+<meta property="article:published_time" content="2022-05-29T02:16:52.953Z">
+<meta property="article:modified_time" content="2022-06-24T06:51:39.527Z">
+<meta property="article:author" content="cuifuan">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://imgconvert.csdnimg.cn/aHR0cDovL2Nkbi5ubGFyay5jb20veXVxdWUvMC8yMDIwL3BuZy82MzEyNDIvMTU5MDA0ODU1MjQ2Mi04YmI3MTZkZC1jYmU0LTQ1ZTUtOThjMC1lZjc4ZmQ1OTM2NmIucG5n?x-oss-process=image/format,png#align=left&display=inline&height=873&margin=[objectObject]&name=image.png&originHeight=1746&originWidth=3354&size=419283&status=done&style=none&width=1677">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>崔先生的笔记</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"cuifuan.github.io","root":"/","version":"1.9.5-a","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>cuifuan&#39;s note</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text=""></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2022-05-29 10:16" pubdate>
+          2022年5月29日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          8.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          74 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header"></h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><code>JPA</code> 一种规范，并非ORM框架，也就是ORM上统一的规范。</p>
+<p>今天学习的是 <code>spring-data-jpa</code>，与 <code>Mybatis</code> 类似。根本上都是用来在 <code>Java</code> 中用来操作数据库的，不是比 <code>Mybatis</code> 强，也不比 <code>Mybatis</code> 弱，各有各的好处。</p>
+<p>那就有人要说了，那我为啥要再去学 JPA，而不直接接着用 Mybatis。其实 JPA 技术的核心在于便捷开发，可以直接通过<strong>实体字段映射表字段</strong>，在启动项目的时候，根据<strong>配置策略来进行表结构的生成或者增量变动</strong>。</p>
+<p>下面我们通过一些简单的案例来初步学习下。  </p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><blockquote>
+<p>用这项技术可能会出现什么问题，官方有没有提供方案解决，如果没有，可能的解决方案有哪些。</p>
+</blockquote>
+<h1 id=""><a href="#" class="headerlink" title=""></a></h1><h2 id="-1"><a href="#-1" class="headerlink" title=""></a></h2><ul>
+<li>spring-boot-starter-data-jpa 是Spring Boot的项目，包含了spring-data-jpa和一些其他依赖用于Spring Boot项目</li>
+<li>spring-data-jpa 是Spring Data的项目，就是本体，用于任何项目</li>
+</ul>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><ul>
+<li>为了执行简单查询分页，编写太多重复代码</li>
+<li>基于JPA的数据访问层的增强支持<blockquote>
+<p>用了之后可以做什么，为什么要用？如下代码解释</p>
+</blockquote>
+</li>
+</ul>
+<p>实体类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.example.springredis.entity;<br><br><span class="hljs-keyword">import</span> lombok.Data;<br><br><span class="hljs-keyword">import</span> javax.persistence.Entity;<br><span class="hljs-keyword">import</span> javax.persistence.GeneratedValue;<br><span class="hljs-keyword">import</span> javax.persistence.GenerationType;<br><span class="hljs-keyword">import</span> javax.persistence.Id;<br><span class="hljs-keyword">import</span> java.io.Serializable;<br><br><span class="hljs-meta">@Entity</span><br><span class="hljs-meta">@Data</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Serializable</span> &#123;<br>    <span class="hljs-meta">@Id</span><br>    <span class="hljs-meta">@GeneratedValue(strategy = GenerationType.AUTO)</span><br>    <span class="hljs-keyword">private</span> Long id;<br>    <span class="hljs-keyword">private</span> String name;<br>    <span class="hljs-keyword">private</span> String account;<br>    <span class="hljs-keyword">private</span> String pwd;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<p>dao层</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Repository</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">UserDao</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">JpaRepository</span>&lt;User, Long&gt; &#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<p>测试类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Autowired</span><br>	<span class="hljs-keyword">private</span> UserDao userDao;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">findAllTest</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(userDao.findAll().toString());<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+
+<p>上面的操作已经完成了一个查询全部，相信不用在做多余的解释了</p>
+<p>JPA优点：主要就是简单易用，集成方便,可以不用写SQL语句</p>
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><ul>
+<li>JDK 1.8 以上</li>
+<li>IDEA 2020.3</li>
+<li>Gradle 5+ 或者 Maven 3.5+</li>
+<li>在 <a target="_blank" rel="noopener" href="https://start.spring.io/">https://start.spring.io/</a> 初始化一个项目</li>
+</ul>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2Nkbi5ubGFyay5jb20veXVxdWUvMC8yMDIwL3BuZy82MzEyNDIvMTU5MDA0ODU1MjQ2Mi04YmI3MTZkZC1jYmU0LTQ1ZTUtOThjMC1lZjc4ZmQ1OTM2NmIucG5n?x-oss-process=image/format,png#align=left&display=inline&height=873&margin=[objectObject]&name=image.png&originHeight=1746&originWidth=3354&size=419283&status=done&style=none&width=1677" srcset="/img/loading.gif" lazyload alt="image.png"><br>这里使用的是Maven,下载之后请在IDEA导入项目</p>
+<h2 id="项目结构图"><a href="#项目结构图" class="headerlink" title="项目结构图"></a>项目结构图</h2><p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2Nkbi5ubGFyay5jb20veXVxdWUvMC8yMDIwL3BuZy82MzEyNDIvMTU5MDA1NTgyNTE3My1hNDEwMTY0MS1hYWZlLTQ4NDUtODJhZC05MmY3MDhjZGNiODUucG5n?x-oss-process=image/format,png#align=left&display=inline&height=747&margin=[objectObject]&name=image.png&originHeight=1494&originWidth=838&size=216173&status=done&style=none&width=419" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="先看pom-xml配置"><a href="#先看pom-xml配置" class="headerlink" title="先看pom.xml配置"></a>先看pom.xml配置</h2><blockquote>
+<p>国外依赖下载慢,更换阿里源</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">project</span> <span class="hljs-attr">xmlns:xsi</span>=<span class="hljs-string">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://maven.apache.org/POM/4.0.0&quot;</span></span><br><span class="hljs-tag">         <span class="hljs-attr">xsi:schemaLocation</span>=<span class="hljs-string">&quot;http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">modelVersion</span>&gt;</span>4.0.0<span class="hljs-tag">&lt;/<span class="hljs-name">modelVersion</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">parent</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>2.3.0.RELEASE<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">relativePath</span>/&gt;</span> <span class="hljs-comment">&lt;!-- lookup parent from repository --&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">parent</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.example<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>springboot-jpa<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>0.0.1-SNAPSHOT<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>springboot-jpa<span class="hljs-tag">&lt;/<span class="hljs-name">name</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">description</span>&gt;</span>Demo project for Spring Boot<span class="hljs-tag">&lt;/<span class="hljs-name">description</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">properties</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">java.version</span>&gt;</span>1.8<span class="hljs-tag">&lt;/<span class="hljs-name">java.version</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">properties</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">dependencies</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-data-jpa<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.h2database<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>h2<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>runtime<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.projectlombok<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>lombok<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">optional</span>&gt;</span>true<span class="hljs-tag">&lt;/<span class="hljs-name">optional</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">scope</span>&gt;</span>test<span class="hljs-tag">&lt;/<span class="hljs-name">scope</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">dependencies</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">build</span>&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">plugins</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">plugin</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>org.springframework.boot<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">plugin</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">plugins</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">build</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">repositories</span>&gt;</span><br>        <span class="hljs-comment">&lt;!--阿里云主仓库，代理了maven central和jcenter仓库--&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">repository</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">id</span>&gt;</span>aliyun<span class="hljs-tag">&lt;/<span class="hljs-name">id</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>aliyun<span class="hljs-tag">&lt;/<span class="hljs-name">name</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">url</span>&gt;</span>https://maven.aliyun.com/repository/public<span class="hljs-tag">&lt;/<span class="hljs-name">url</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">releases</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">enabled</span>&gt;</span>true<span class="hljs-tag">&lt;/<span class="hljs-name">enabled</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">releases</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">snapshots</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">enabled</span>&gt;</span>false<span class="hljs-tag">&lt;/<span class="hljs-name">enabled</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">snapshots</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">repository</span>&gt;</span><br>        <span class="hljs-comment">&lt;!--阿里云代理Spring 官方仓库--&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">repository</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">id</span>&gt;</span>spring-milestones<span class="hljs-tag">&lt;/<span class="hljs-name">id</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">name</span>&gt;</span>Spring Milestones<span class="hljs-tag">&lt;/<span class="hljs-name">name</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">url</span>&gt;</span>https://maven.aliyun.com/repository/spring<span class="hljs-tag">&lt;/<span class="hljs-name">url</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">releases</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">enabled</span>&gt;</span>true<span class="hljs-tag">&lt;/<span class="hljs-name">enabled</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">releases</span>&gt;</span><br>            <span class="hljs-tag">&lt;<span class="hljs-name">snapshots</span>&gt;</span><br>                <span class="hljs-tag">&lt;<span class="hljs-name">enabled</span>&gt;</span>false<span class="hljs-tag">&lt;/<span class="hljs-name">enabled</span>&gt;</span><br>            <span class="hljs-tag">&lt;/<span class="hljs-name">snapshots</span>&gt;</span><br>        <span class="hljs-tag">&lt;/<span class="hljs-name">repository</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">repositories</span>&gt;</span><br><br><span class="hljs-tag">&lt;/<span class="hljs-name">project</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="定义一个实体对象-SysUser-java"><a href="#定义一个实体对象-SysUser-java" class="headerlink" title="定义一个实体对象 SysUser.java"></a>定义一个实体对象 SysUser.java</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.example.demo.model;<br><br><span class="hljs-keyword">import</span> lombok.AllArgsConstructor;<br><span class="hljs-keyword">import</span> lombok.Data;<br><span class="hljs-keyword">import</span> lombok.NoArgsConstructor;<br><br><span class="hljs-keyword">import</span> javax.persistence.Entity;<br><span class="hljs-keyword">import</span> javax.persistence.GeneratedValue;<br><span class="hljs-keyword">import</span> javax.persistence.GenerationType;<br><span class="hljs-keyword">import</span> javax.persistence.Id;<br><br><span class="hljs-meta">@Data</span><br><span class="hljs-meta">@NoArgsConstructor</span><br><span class="hljs-meta">@AllArgsConstructor</span><br><span class="hljs-meta">@Entity(name = &quot;sys_user&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SysUser</span> &#123;<br><br>    <span class="hljs-meta">@Id</span><br>    <span class="hljs-meta">@GeneratedValue(strategy = GenerationType.AUTO)</span><br>    <span class="hljs-keyword">private</span> Long id;<br><br>    <span class="hljs-keyword">private</span> String email;<br><br>    <span class="hljs-keyword">private</span> String username;<br><br>    <span class="hljs-keyword">private</span> String password;<br><br>    <span class="hljs-keyword">public</span> <span class="hljs-title function_">SysUser</span><span class="hljs-params">(String email, String username, String password)</span> &#123;<br>        <span class="hljs-built_in">this</span>.email = email;<br>        <span class="hljs-built_in">this</span>.username = username;<br>        <span class="hljs-built_in">this</span>.password = password;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<ul>
+<li>这里有一个<code>**SysUser**</code> 类, <code>@NoArgsConstructor</code>  默认构造函数仅为JPA而存在。</li>
+<li>另一个构造函数是您将用于创建要保存到数据库的user实例的构造函数。</li>
+<li>在类上加 <code>@Entity</code>  注解，表示这个是一个 JPA 的实体，如果在类上没有加 <code>@Table</code> 注解，表明该实体将映射到名为 <code>sys_user</code>  的表,如果要加上,可以在其 name 属性里写入表名，如: <code>@Table(name = &quot;t_user&quot;)</code> </li>
+<li><code>id</code> 属性使用 <code>@Id</code> 注释，以便JPA将其识别为对象的ID.</li>
+<li>@GeneratedValue(strategy  &#x3D; GenerationType.AUTO) 自增长ID策略</li>
+</ul>
+<h2 id="创建一个-UserRepository-java-接口"><a href="#创建一个-UserRepository-java-接口" class="headerlink" title="创建一个 UserRepository.java 接口"></a>创建一个 UserRepository.java 接口</h2><blockquote>
+<p>这里很简单，直接继承核心接口<strong>JpaRepository</strong></p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.example.demo.repository;<br><br><span class="hljs-keyword">import</span> com.example.demo.model.SysUser;<br><span class="hljs-keyword">import</span> org.springframework.data.jpa.repository.JpaRepository;<br><span class="hljs-keyword">import</span> org.springframework.stereotype.Repository;<br><br><span class="hljs-meta">@Repository</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">UserRepository</span> <span class="hljs-keyword">extends</span> <span class="hljs-title class_">JpaRepository</span>&lt;SysUser, Long&gt; &#123;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3d4NC5zaW5haW1nLmNuL2xhcmdlL2QxZGI5ZmQzZ3kxZnhsa3FtYTJiNWoyMXdxMWhtZHpoLmpwZw?x-oss-process=image/format,png#align=left&display=inline&height=1930&margin=[objectObject]&originHeight=1930&originWidth=2474&status=done&style=none&width=2474" srcset="/img/loading.gif" lazyload></p>
+<h2 id="配置文件application-yml"><a href="#配置文件application-yml" class="headerlink" title="配置文件application.yml"></a>配置文件application.yml</h2><p>修改application.properties 为 application.yml</p>
+<p><strong>src&#x2F;main&#x2F;resources&#x2F;application.yml</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java">spring:<br>  datasource:<br>    driverClassName: org.h2.Driver<br>    password: root<br>    url: jdbc:h2:mem:demodb:file:data/demo<br>    username: root<br>  jpa:<br>    open-in-view: <span class="hljs-literal">true</span><br>    database-platform: org.hibernate.dialect.H2Dialect<br>    # spring.jpa.show-sql=<span class="hljs-literal">true</span> 配置在日志中打印出执行的 SQL 语句信息。<br>    show-sql: <span class="hljs-literal">true</span><br>    # 配置指明在程序启动的时候要删除并且创建实体类对应的表。<br>    # create 这个参数很危险，因为他会把对应的表删除掉然后重建。所以千万不要在生成环境中使用。只有在测试环境中，一开始初始化数据库结构的时候才能使用一次。<br>    # ddl-auto:create----每次运行该程序，没有表格会新建表格，表内有数据会清空<br>    # ddl-auto:create-drop----每次程序结束的时候会清空表<br>    # ddl-auto:update----每次运行程序，没有表格会新建表格，表内有数据不会清空，只会更新(推荐)<br>    # ddl-auto:validate----运行程序会校验数据与数据库的字段类型是否相同，不同会报错<br>    hibernate.ddl-auto: update<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="h2数据库"><a href="#h2数据库" class="headerlink" title="h2数据库"></a>h2数据库</h2><blockquote>
+<p>在resources 文件夹下新建 data.sql</p>
+</blockquote>
+<p><strong>data.sql</strong> </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">DROP</span> <span class="hljs-keyword">TABLE</span> IF <span class="hljs-keyword">EXISTS</span> sys_user;<br><br><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">TABLE</span> sys_user<br>(<br>    id       <span class="hljs-type">INT</span> AUTO_INCREMENT <span class="hljs-keyword">PRIMARY</span> KEY,<br>    email    <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">250</span>) <span class="hljs-keyword">DEFAULT</span> <span class="hljs-keyword">NULL</span>,<br>    username <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">250</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span>,<br>    password <span class="hljs-type">VARCHAR</span>(<span class="hljs-number">250</span>) <span class="hljs-keyword">NOT</span> <span class="hljs-keyword">NULL</span><br>);<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="测试类进行测试-SpringbootJpaApplicationTests-java"><a href="#测试类进行测试-SpringbootJpaApplicationTests-java" class="headerlink" title="测试类进行测试 SpringbootJpaApplicationTests.java"></a>测试类进行测试 SpringbootJpaApplicationTests.java</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">package</span> com.example.demo;<br><br><span class="hljs-keyword">import</span> com.example.demo.model.SysUser;<br><span class="hljs-keyword">import</span> com.example.demo.repository.UserRepository;<br><span class="hljs-keyword">import</span> lombok.extern.slf4j.Slf4j;<br><span class="hljs-keyword">import</span> org.junit.After;<br><span class="hljs-keyword">import</span> org.junit.Before;<br><span class="hljs-keyword">import</span> org.junit.Test;<br><span class="hljs-keyword">import</span> org.junit.runner.RunWith;<br><span class="hljs-keyword">import</span> org.springframework.beans.factory.annotation.Autowired;<br><span class="hljs-keyword">import</span> org.springframework.boot.test.context.SpringBootTest;<br><span class="hljs-keyword">import</span> org.springframework.test.context.junit4.SpringRunner;<br><br><span class="hljs-meta">@Slf4j</span><br><span class="hljs-meta">@RunWith(SpringRunner.class)</span><br><span class="hljs-meta">@SpringBootTest</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">SpringbootJpaApplicationTests</span> &#123;<br><br>    <span class="hljs-meta">@Autowired</span><br>    <span class="hljs-keyword">private</span> UserRepository userRepository;<br><br>    <span class="hljs-meta">@Before</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">add</span><span class="hljs-params">()</span> &#123;<br>        userRepository.save(<span class="hljs-keyword">new</span> <span class="hljs-title class_">SysUser</span>(<span class="hljs-string">&quot;123@qq.com&quot;</span>, <span class="hljs-string">&quot;root&quot;</span>, <span class="hljs-string">&quot;root&quot;</span>));<br>    &#125;<br><br>    <span class="hljs-meta">@Test</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">contextLoads</span><span class="hljs-params">()</span> &#123;<br>        System.out.println(userRepository.findAll().toString());<br>    &#125;<br><br>    <span class="hljs-comment">//修改操作</span><br>    <span class="hljs-meta">@After</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">update</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-comment">// ifPresent 如果存在值，则使用值调用指定的使用者，否则不执行任何操作。</span><br>        userRepository.findById(<span class="hljs-number">1L</span>).ifPresent(user -&gt; &#123;<br>            user.setUsername(<span class="hljs-string">&quot;马华云腾&quot;</span>);<br>            userRepository.save(user);<br>            System.out.println(user.toString());<br>        &#125;);<br>    &#125;<br><br>    <span class="hljs-comment">//删除</span><br>    <span class="hljs-meta">@After</span><br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">del</span><span class="hljs-params">()</span> &#123;<br>        userRepository.findById(<span class="hljs-number">2L</span>).ifPresent(user -&gt; userRepository.delete(user));<br>    &#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+<h2 id="测试输出"><a href="#测试输出" class="headerlink" title="测试输出"></a>测试输出</h2><p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2Nkbi5ubGFyay5jb20veXVxdWUvMC8yMDIwL3BuZy82MzEyNDIvMTU5MDA1Njg2MTIwNi1kMTBhMjcxYi04M2MzLTQyOTEtYjI1ZS1jMDIzZTYwZjI3N2QucG5n?x-oss-process=image/format,png#align=left&display=inline&height=379&margin=[objectObject]&name=image.png&originHeight=758&originWidth=3272&size=213930&status=done&style=none&width=1636" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<h2 id="常见异常"><a href="#常见异常" class="headerlink" title="常见异常"></a>常见异常</h2><p>如果出现下列等错误：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs stylus">Error:(<span class="hljs-number">41</span>, <span class="hljs-number">13</span>) java: 找不到符号<br>  符号:   方法 <span class="hljs-built_in">setName</span>(java<span class="hljs-selector-class">.lang</span>.String)<br>  位置: 类型为com<span class="hljs-selector-class">.example</span><span class="hljs-selector-class">.springbootjpademo</span><span class="hljs-selector-class">.entity</span>.User的变量 user<br></code></pre></td></tr></table></figure>
+
+
+<p>请注意下面的设置是否正确：</p>
+<p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL3d4NC5zaW5haW1nLmNuL2xhcmdlL2QxZGI5ZmQzZ3kxZnhsbXZlb3EweWoyMXZ3MTl3YWpoLmpwZw?x-oss-process=image/format,png#align=left&display=inline&height=1652&margin=[objectObject]&originHeight=1652&originWidth=2444&status=done&style=none&width=2444" srcset="/img/loading.gif" lazyload></p>
+<h2 id="RestClient-API-测试"><a href="#RestClient-API-测试" class="headerlink" title="RestClient API 测试"></a>RestClient API 测试</h2><p><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2Nkbi5ubGFyay5jb20veXVxdWUvMC8yMDIwL3BuZy82MzEyNDIvMTU5MDA1NjkyNzc2Ni1kNmY2Njg0OC0xYjFhLTQ0YjUtYWEyMS1iYzJmZTNiZWM1NmIucG5n?x-oss-process=image/format,png#align=left&display=inline&height=879&margin=[objectObject]&name=image.png&originHeight=1758&originWidth=1340&size=593382&status=done&style=none&width=670" srcset="/img/loading.gif" lazyload alt="image.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs java">### 新增<span class="hljs-number">1</span><br><br>POST http:<span class="hljs-comment">//localhost:8080/user/add</span><br>Content-Type: application/json<br><br>&#123;<br>  <span class="hljs-string">&quot;email&quot;</span>: <span class="hljs-string">&quot;eyck@aws.com&quot;</span>,<br>  <span class="hljs-string">&quot;username&quot;</span>: <span class="hljs-string">&quot;root&quot;</span>,<br>  <span class="hljs-string">&quot;password&quot;</span>: <span class="hljs-string">&quot;root&quot;</span><br>&#125;<br><br>### 新增<span class="hljs-number">2</span><br><br>POST http:<span class="hljs-comment">//localhost:8080/user/add</span><br>Content-Type: application/json<br><br>&#123;<br><span class="hljs-string">&quot;email&quot;</span>: <span class="hljs-string">&quot;ekko@aws.com&quot;</span>,<br><span class="hljs-string">&quot;username&quot;</span>: <span class="hljs-string">&quot;ekko&quot;</span>,<br><span class="hljs-string">&quot;password&quot;</span>: <span class="hljs-string">&quot;ekko&quot;</span><br>&#125;<br><br>### 修改<br><br>PUT http:<span class="hljs-comment">//localhost:8080/user/update</span><br>Content-Type: application/json<br><br>&#123;<br>  <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">1</span>,<br>  <span class="hljs-string">&quot;email&quot;</span>: <span class="hljs-string">&quot;eyck@aws.com&quot;</span>,<br>  <span class="hljs-string">&quot;username&quot;</span>: <span class="hljs-string">&quot;root&quot;</span>,<br>  <span class="hljs-string">&quot;password&quot;</span>: <span class="hljs-string">&quot;root&quot;</span><br>&#125;<br><br>### 获取所有<br>GET http:<span class="hljs-comment">//localhost:8080/user/all</span><br>Accept: *<span class="hljs-comment">/*</span><br><span class="hljs-comment">Cache-Control: no-cache</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">### 删除</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">PUT http://localhost:8080/user/del/2</span><br><span class="hljs-comment"></span><br><span class="hljs-comment">### 获取所有</span><br><span class="hljs-comment">GET http://localhost:8080/user/all</span><br><span class="hljs-comment">Accept: */</span>*<br>Cache-Control: no-cache<br></code></pre></td></tr></table></figure>
+
+
+<p>左上角 Run all …<br>测试结果….<br><img src="https://imgconvert.csdnimg.cn/aHR0cDovL2Nkbi5ubGFyay5jb20veXVxdWUvMC8yMDIwL3BuZy82MzEyNDIvMTU5MDA1Njk5ODcwOC02NDViNmZlNy1jYmJhLTRmZWUtYTUyNi1mNDk3Y2JlODM3MmQucG5n?x-oss-process=image/format,png#align=left&display=inline&height=437&margin=[objectObject]&name=image.png&originHeight=874&originWidth=1850&size=192793&status=done&style=none&width=925" srcset="/img/loading.gif" lazyload alt="image.png"> </p>
+<h2 id="代码地址"><a href="#代码地址" class="headerlink" title="代码地址"></a>代码地址</h2><p><a target="_blank" rel="noopener" href="https://github.com/Gleans/spring-boot/tree/master/springboot-jpa">https://github.com/Gleans/spring-boot/tree/master/springboot-jpa</a></p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div></div>
+      <div>https://cuifuan.github.io/2022/05/29/back-end/spring-boot/jpa/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>cuifuan</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2022年5月29日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/06/24/linux/%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" title="">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/05/28/back-end/plugins/lombok/" title="">
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

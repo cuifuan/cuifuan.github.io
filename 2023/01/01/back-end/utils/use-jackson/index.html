@@ -1,0 +1,720 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="cuifuan">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="为何抛弃 Fastjson ？ 速度是较快一些，但 Jackson 相对稳定，我的程序也不差那 10-20 ms。 序列化对象时为 null 的直接给我去掉了，我知道可以配置不过滤。 配置 null 过滤，再去配置时间格式化过滤，其他的配置再去加。 序列化对象之后，属性顺序乱序，也可以配置，但我想和上面的一起用的时候，要如何配置。 一些日常的小 BUG，可以去看下 fastjson 1.x 版本的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="抛弃 Fastjson 拥抱 Jackson">
+<meta property="og:url" content="https://cuifuan.github.io/2023/01/01/back-end/utils/use-jackson/index.html">
+<meta property="og:site_name" content="崔先生的笔记">
+<meta property="og:description" content="为何抛弃 Fastjson ？ 速度是较快一些，但 Jackson 相对稳定，我的程序也不差那 10-20 ms。 序列化对象时为 null 的直接给我去掉了，我知道可以配置不过滤。 配置 null 过滤，再去配置时间格式化过滤，其他的配置再去加。 序列化对象之后，属性顺序乱序，也可以配置，但我想和上面的一起用的时候，要如何配置。 一些日常的小 BUG，可以去看下 fastjson 1.x 版本的">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-01-01T11:20:00.000Z">
+<meta property="article:modified_time" content="2023-08-21T06:24:41.736Z">
+<meta property="article:author" content="cuifuan">
+<meta property="article:tag" content="后端">
+<meta property="article:tag" content="工具类">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>抛弃 Fastjson 拥抱 Jackson - 崔先生的笔记</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"cuifuan.github.io","root":"/","version":"1.9.5-a","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>cuifuan&#39;s note</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="抛弃 Fastjson 拥抱 Jackson"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-01-01 19:20" pubdate>
+          2023年1月1日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          40 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">抛弃 Fastjson 拥抱 Jackson</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h3 id="为何抛弃-Fastjson-？"><a href="#为何抛弃-Fastjson-？" class="headerlink" title="为何抛弃 Fastjson ？"></a>为何抛弃 Fastjson ？</h3><ul>
+<li>速度是较快一些，但 Jackson 相对稳定，我的程序也不差那 10-20 ms。</li>
+<li>序列化对象时为 null 的直接给我去掉了，我知道可以配置不过滤。</li>
+<li>配置 null 过滤，再去配置时间格式化过滤，其他的配置再去加。</li>
+<li>序列化对象之后，属性顺序乱序，也可以配置，但我想和上面的一起用的时候，要如何配置。</li>
+<li>一些日常的小 BUG，可以去看下 fastjson 1.x 版本的 issues ，基本没修复</li>
+</ul>
+<p>后面开始记录 Jackson 一些常用方式，平替 Fastjson.</p>
+<h3 id="新建-ObjectMapper-转换器的工具类"><a href="#新建-ObjectMapper-转换器的工具类" class="headerlink" title="新建 ObjectMapper 转换器的工具类"></a>新建 ObjectMapper 转换器的工具类</h3><p>新建 <code>ObjUtil.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">import</span> com.fasterxml.jackson.databind.ObjectMapper;<br><span class="hljs-keyword">import</span> com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;<br><span class="hljs-keyword">import</span> com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;<br><span class="hljs-keyword">import</span> com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;<br><span class="hljs-keyword">import</span> com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;<br><span class="hljs-keyword">import</span> com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;<br><span class="hljs-keyword">import</span> com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;<br><span class="hljs-keyword">import</span> com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;<br><br><span class="hljs-keyword">import</span> java.time.LocalDate;<br><span class="hljs-keyword">import</span> java.time.LocalDateTime;<br><span class="hljs-keyword">import</span> java.time.LocalTime;<br><span class="hljs-keyword">import</span> java.time.format.DateTimeFormatter;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">ObjUtil</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> ObjectMapper <span class="hljs-title function_">objectMapper</span><span class="hljs-params">()</span> &#123;<br>        <span class="hljs-type">ObjectMapper</span> <span class="hljs-variable">objectMapper</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">ObjectMapper</span>();<br><br>        <span class="hljs-type">JavaTimeModule</span> <span class="hljs-variable">javaTimeModule</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">JavaTimeModule</span>();<br><br>        javaTimeModule.addSerializer(LocalDateTime.class, <span class="hljs-keyword">new</span> <span class="hljs-title class_">LocalDateTimeSerializer</span>(DateTimeFormatter.ofPattern(<span class="hljs-string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>)));<br>        javaTimeModule.addSerializer(LocalDate.class, <span class="hljs-keyword">new</span> <span class="hljs-title class_">LocalDateSerializer</span>(DateTimeFormatter.ofPattern(<span class="hljs-string">&quot;yyyy-MM-dd&quot;</span>)));<br><br>        javaTimeModule.addSerializer(LocalTime.class, <span class="hljs-keyword">new</span> <span class="hljs-title class_">LocalTimeSerializer</span>(DateTimeFormatter.ofPattern(<span class="hljs-string">&quot;HH:mm:ss&quot;</span>)));<br>        javaTimeModule.addDeserializer(LocalDateTime.class, <span class="hljs-keyword">new</span> <span class="hljs-title class_">LocalDateTimeDeserializer</span>(DateTimeFormatter.ofPattern(<span class="hljs-string">&quot;yyyy-MM-dd HH:mm:ss&quot;</span>)));<br><br>        javaTimeModule.addDeserializer(LocalDate.class, <span class="hljs-keyword">new</span> <span class="hljs-title class_">LocalDateDeserializer</span>(DateTimeFormatter.ofPattern(<span class="hljs-string">&quot;yyyy-MM-dd&quot;</span>)));<br>        javaTimeModule.addDeserializer(LocalTime.class, <span class="hljs-keyword">new</span> <span class="hljs-title class_">LocalTimeDeserializer</span>(DateTimeFormatter.ofPattern(<span class="hljs-string">&quot;HH:mm:ss&quot;</span>)));<br><br>        objectMapper.registerModule(javaTimeModule);<br>        <span class="hljs-keyword">return</span> objectMapper;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>上述代码是用于创建一个 <code>Jackson ObjectMapper</code> 对象，并注册了 <code>JavaTimeModule</code> 模块，以便在序列化和反序列化过程中支持 Java 8 的日期和时间类。</p>
+<blockquote>
+<ol>
+<li>首先，代码创建了一个新的 <code>ObjectMapper</code> 对象，这是 Jackson 库中用于序列化和反序列化 JSON 数据的核心类。</li>
+<li>接下来，创建了一个 <code>JavaTimeModule</code> 对象，这是 Jackson 库中的一个模块，专门用于处理 Java 8 的日期和时间类。</li>
+<li>通过调用 <code>javaTimeModule.addSerializer</code> 方法，将不同类型的日期和时间类与相应的序列化器关联起来。序列化器将 Java 8 的日期和时间对象转换为特定的字符串格式。例如，<code>LocalDateTime</code> 类型被序列化为 “yyyy-MM-dd HH:mm:ss” 格式的字符串，<code>LocalDate</code> 类型被序列化为 “yyyy-MM-dd” 格式的字符串，<code>LocalTime</code> 类型被序列化为 “HH:mm:ss” 格式的字符串。</li>
+<li>同样，通过调用 <code>javaTimeModule.addDeserializer</code> 方法，将不同类型的日期和时间类与相应的反序列化器关联起来。反序列化器将特定格式的字符串解析为相应的 Java 8 日期和时间对象。例如，<code>LocalDateTime</code> 类型被反序列化从 “yyyy-MM-dd HH:mm:ss” 格式的字符串解析，<code>LocalDate</code> 类型被反序列化从 “yyyy-MM-dd” 格式的字符串解析，<code>LocalTime</code> 类型被反序列化从 “HH:mm:ss” 格式的字符串解析。</li>
+<li>最后，将创建的 <code>JavaTimeModule</code> 注册到 <code>objectMapper</code> 对象中，以便在序列化和反序列化过程中使用该模块的配置。</li>
+</ol>
+</blockquote>
+<h3 id="实体对象转换为-json"><a href="#实体对象转换为-json" class="headerlink" title="实体对象转换为 json"></a>实体对象转换为 json</h3><p>给出一个实体类 <code>User.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Data</span><br><span class="hljs-meta">@NoArgsConstructor</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">User</span> &#123;<br><br>    <span class="hljs-keyword">private</span> String name;<br><br>    <span class="hljs-keyword">private</span> Integer age;<br><br>    <span class="hljs-keyword">private</span> LocalDateTime brithday;<br><br>    <span class="hljs-keyword">private</span> String fullName;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>下面来创建一个 User 实体插入测试值后进行序列化为字符串</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UserTest</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> JsonProcessingException &#123;<br>        <span class="hljs-type">User</span> <span class="hljs-variable">user</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>();<br>        user.setBrithday(LocalDateTime.now());<br>        user.setName(<span class="hljs-string">&quot;张三&quot;</span>);<br>        <span class="hljs-type">ObjectMapper</span> <span class="hljs-variable">objectMapper</span> <span class="hljs-operator">=</span> ObjUtil.objectMapper();<br>        <span class="hljs-type">String</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> objectMapper.writeValueAsString(user);<br>        System.out.println(result);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>上述代码中通过 <code>ObjUtil.objectMapper()</code> 调用我们在工具类中定义好的转换器</p>
+<p>输出:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;张三&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;age&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">null</span></span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;brithday&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;2023-08-16 10:38:16&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;fullName&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">null</span></span> <span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="给-JSON-中增加一个属性并赋值"><a href="#给-JSON-中增加一个属性并赋值" class="headerlink" title="给 JSON 中增加一个属性并赋值"></a>给 JSON 中增加一个属性并赋值</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">UserTest</span> &#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title function_">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> JsonProcessingException &#123;<br>        <span class="hljs-type">User</span> <span class="hljs-variable">user</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">User</span>();<br>        user.setBrithday(LocalDateTime.now());<br>        user.setName(<span class="hljs-string">&quot;张三&quot;</span>);<br>        <span class="hljs-type">ObjectMapper</span> <span class="hljs-variable">objectMapper</span> <span class="hljs-operator">=</span> ObjUtil.objectMapper();<br>        <span class="hljs-type">String</span> <span class="hljs-variable">result</span> <span class="hljs-operator">=</span> objectMapper.writeValueAsString(user);<br>        System.out.println(<span class="hljs-string">&quot;User ==&gt; &quot;</span> + result);<br>        <span class="hljs-type">ObjectNode</span> <span class="hljs-variable">jsonNode</span> <span class="hljs-operator">=</span> (ObjectNode) objectMapper.readTree(result);<br>        jsonNode.put(<span class="hljs-string">&quot;remark&quot;</span>, <span class="hljs-string">&quot;精英&quot;</span>);<br>        System.out.println(<span class="hljs-string">&quot;jsonNode ==&gt; &quot;</span> + objectMapper.writeValueAsString(jsonNode));<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>上述代码使用了一个已经创建好的 ObjectMapper 对象（通过 <code>ObjUtil.objectMapper()</code> 方法）来进行序列化和反序列化操作，并对 JSON 数据进行修改。</p>
+<blockquote>
+<ol>
+<li><code>ObjectMapper objectMapper = ObjUtil.objectMapper();</code>: 首先，通过 <code>ObjUtil.objectMapper()</code> 方法获取一个预配置好的 ObjectMapper 对象。这个对象在之前的代码段中已经被配置为支持 Java 8 的日期和时间类的序列化和反序列化。</li>
+<li><code>String result = objectMapper.writeValueAsString(user);</code>: 使用 ObjectMapper 对象将一个名为 <code>user</code> 的对象序列化为 JSON 字符串，并将结果存储在 <code>result</code> 变量中。</li>
+<li><code>System.out.println(&quot;User ==&gt; &quot; + result);</code>: 打印刚刚序列化的 JSON 字符串表示的 <code>user</code> 对象。</li>
+<li><code>ObjectNode jsonNode = (ObjectNode) objectMapper.readTree(result);</code>: 通过 ObjectMapper 对象的 <code>readTree</code> 方法，将之前序列化得到的 JSON 字符串解析为一个 <code>JsonNode</code> 对象，然后将其转换为 <code>ObjectNode</code> 类型。这使得你可以对 JSON 数据进行修改。</li>
+<li><code>jsonNode.put(&quot;remark&quot;, &quot;精英&quot;);</code>: 在解析得到的 <code>jsonNode</code> 对象中，添加一个名为 “remark” 的键值对，将值设置为 “精英”。</li>
+<li><code>System.out.println(&quot;jsonNode ==&gt; &quot; + objectMapper.writeValueAsString(jsonNode));</code>: 将经过修改的 <code>jsonNode</code> 对象再次序列化为 JSON 字符串，并打印输出。</li>
+</ol>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java%E7%B3%BB%E5%88%97/" class="category-chain-item">Java系列</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%90%8E%E7%AB%AF/" class="print-no-link">#后端</a>
+      
+        <a href="/tags/%E5%B7%A5%E5%85%B7%E7%B1%BB/" class="print-no-link">#工具类</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>抛弃 Fastjson 拥抱 Jackson</div>
+      <div>https://cuifuan.github.io/2023/01/01/back-end/utils/use-jackson/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>cuifuan</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年1月1日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/02/01/back-end/python/pyenv/" title="pyenv -- 快速切换 Python 版本">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">pyenv -- 快速切换 Python 版本</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/08/26/back-end/spring-cloud/2-Feign/" title="">
+                        <span class="hidden-mobile"></span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

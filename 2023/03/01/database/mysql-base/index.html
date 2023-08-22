@@ -16,25 +16,24 @@
   <meta name="author" content="cuifuan">
   <meta name="keywords" content="">
   
-    <meta name="description" content="前言MySQL 优化用到的最关键的就是 EXPLAIN  命令, 在你需要优化的 SQL 前加上 EXPLAIN ，就可以看到这条 SQL 语句的执行计划.   测试一下:   1234567mysql&gt; EXPLAIN SELECT * FROM user_info WHERE id not in (1350,1351) LIMIT 1;+----+-------------+------">
+    <meta name="description" content="新增用户12345-- 创建用户create user [用户名] identified by &amp;#x27;[密码]&amp;#x27;;-- 赋予数据库权限grant all privileges on [数据库].* to [用户名]@&amp;#x27;%&amp;#x27; identified by &amp;#x27;[密码]&amp;#x27;;flush privileges;  开启远程登录权限1234-- 使用%赋予">
 <meta property="og:type" content="article">
-<meta property="og:title" content="崔先生的笔记">
-<meta property="og:url" content="https://cuifuan.github.io/2022/08/19/database/MySQL%E4%BC%98%E5%8C%96/index.html">
+<meta property="og:title" content="MySQL 基础笔记">
+<meta property="og:url" content="https://cuifuan.github.io/2023/03/01/database/mysql-base/index.html">
 <meta property="og:site_name" content="崔先生的笔记">
-<meta property="og:description" content="前言MySQL 优化用到的最关键的就是 EXPLAIN  命令, 在你需要优化的 SQL 前加上 EXPLAIN ，就可以看到这条 SQL 语句的执行计划.   测试一下:   1234567mysql&gt; EXPLAIN SELECT * FROM user_info WHERE id not in (1350,1351) LIMIT 1;+----+-------------+------">
+<meta property="og:description" content="新增用户12345-- 创建用户create user [用户名] identified by &amp;#x27;[密码]&amp;#x27;;-- 赋予数据库权限grant all privileges on [数据库].* to [用户名]@&amp;#x27;%&amp;#x27; identified by &amp;#x27;[密码]&amp;#x27;;flush privileges;  开启远程登录权限1234-- 使用%赋予">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://images.zabbix.store/markdown/image-20220819170632118.png?markdown">
-<meta property="article:published_time" content="2022-08-19T03:12:12.281Z">
-<meta property="article:modified_time" content="2022-08-19T09:07:00.964Z">
+<meta property="article:published_time" content="2023-03-01T04:20:00.000Z">
+<meta property="article:modified_time" content="2023-08-22T02:20:18.598Z">
 <meta property="article:author" content="cuifuan">
+<meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="http://images.zabbix.store/markdown/image-20220819170632118.png?markdown">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>崔先生的笔记</title>
+  <title>MySQL 基础笔记 - 崔先生的笔记</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -194,13 +193,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/ban.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="MySQL 基础笔记"></span>
           
         </div>
 
@@ -211,8 +210,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-08-19 11:12" pubdate>
-          2022年8月19日 上午
+        <time datetime="2023-03-01 12:20" pubdate>
+          2023年3月1日 中午
         </time>
       </span>
     
@@ -223,7 +222,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          924 字
+          852 字
         
       </span>
     
@@ -271,21 +270,31 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header"></h1>
+            <h1 id="seo-header">MySQL 基础笔记</h1>
             
             
               <div class="markdown-body">
                 
-                <h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>MySQL 优化用到的最关键的就是 <code>EXPLAIN </code> 命令, 在你需要优化的 <code>SQL</code> 前加上 <code>EXPLAIN</code> ，就可以看到这条 <code>SQL</code> 语句的执行计划.  </p>
-<p>测试一下:  </p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql">mysql<span class="hljs-operator">&gt;</span> EXPLAIN <span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> user_info <span class="hljs-keyword">WHERE</span> id <span class="hljs-keyword">not</span> <span class="hljs-keyword">in</span> (<span class="hljs-number">1350</span>,<span class="hljs-number">1351</span>) LIMIT <span class="hljs-number">1</span>;<br><span class="hljs-operator">+</span><span class="hljs-comment">----+-------------+-----------+------------+-------+---------------+---------+---------+------+---------+----------+-------------+</span><br><span class="hljs-operator">|</span> id <span class="hljs-operator">|</span> select_type <span class="hljs-operator">|</span> <span class="hljs-keyword">table</span>     <span class="hljs-operator">|</span> partitions <span class="hljs-operator">|</span> type  <span class="hljs-operator">|</span> possible_keys <span class="hljs-operator">|</span> key     <span class="hljs-operator">|</span> key_len <span class="hljs-operator">|</span> <span class="hljs-keyword">ref</span>  <span class="hljs-operator">|</span> <span class="hljs-keyword">rows</span>    <span class="hljs-operator">|</span> filtered <span class="hljs-operator">|</span> Extra       <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">----+-------------+-----------+------------+-------+---------------+---------+---------+------+---------+----------+-------------+</span><br><span class="hljs-operator">|</span>  <span class="hljs-number">1</span> <span class="hljs-operator">|</span> SIMPLE      <span class="hljs-operator">|</span> user_info <span class="hljs-operator">|</span> <span class="hljs-keyword">NULL</span>       <span class="hljs-operator">|</span> <span class="hljs-keyword">range</span> <span class="hljs-operator">|</span> <span class="hljs-keyword">PRIMARY</span>       <span class="hljs-operator">|</span> <span class="hljs-keyword">PRIMARY</span> <span class="hljs-operator">|</span> <span class="hljs-number">8</span>       <span class="hljs-operator">|</span> <span class="hljs-keyword">NULL</span> <span class="hljs-operator">|</span> <span class="hljs-number">4415090</span> <span class="hljs-operator">|</span>   <span class="hljs-number">100.00</span> <span class="hljs-operator">|</span> <span class="hljs-keyword">Using</span> <span class="hljs-keyword">where</span> <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">----+-------------+-----------+------------+-------+---------------+---------+---------+------+---------+----------+-------------+</span><br><span class="hljs-number">1</span> <span class="hljs-type">row</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">set</span>, <span class="hljs-number">1</span> warning (<span class="hljs-number">0.00</span> sec)<br></code></pre></td></tr></table></figure>
+                <h3 id="新增用户"><a href="#新增用户" class="headerlink" title="新增用户"></a>新增用户</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 创建用户</span><br><span class="hljs-keyword">create</span> <span class="hljs-keyword">user</span> [用户名] identified <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;[密码]&#x27;</span>;<br><span class="hljs-comment">-- 赋予数据库权限</span><br><span class="hljs-keyword">grant</span> <span class="hljs-keyword">all</span> privileges <span class="hljs-keyword">on</span> [数据库].<span class="hljs-operator">*</span> <span class="hljs-keyword">to</span> [用户名]@<span class="hljs-string">&#x27;%&#x27;</span> identified <span class="hljs-keyword">by</span> <span class="hljs-string">&#x27;[密码]&#x27;</span>;<br>flush privileges;<br></code></pre></td></tr></table></figure>
 
-<p>可以看到上面输出的有很多分类，但是都是什么意思呢？一起来学习记录下。  </p>
-<p>我的 MySQL 版本如下：  </p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs sql">mysql<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">select</span> version();<br><span class="hljs-operator">+</span><span class="hljs-comment">-----------+</span><br><span class="hljs-operator">|</span> version() <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">-----------+</span><br><span class="hljs-operator">|</span> <span class="hljs-number">8.0</span><span class="hljs-number">.29</span>    <span class="hljs-operator">|</span><br><span class="hljs-operator">+</span><span class="hljs-comment">-----------+</span><br><span class="hljs-number">1</span> <span class="hljs-type">row</span> <span class="hljs-keyword">in</span> <span class="hljs-keyword">set</span> (<span class="hljs-number">0.00</span> sec)<br></code></pre></td></tr></table></figure>
+<h3 id="开启远程登录权限"><a href="#开启远程登录权限" class="headerlink" title="开启远程登录权限"></a>开启远程登录权限</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 使用%赋予访问权限</span><br><span class="hljs-keyword">GRANT</span> <span class="hljs-keyword">ALL</span> PRIVILEGES <span class="hljs-keyword">ON</span> <span class="hljs-operator">*</span>.<span class="hljs-operator">*</span> <span class="hljs-keyword">TO</span> <span class="hljs-string">&#x27;[用户名]&#x27;</span>@<span class="hljs-string">&#x27;%&#x27;</span> IDENTIFIED <span class="hljs-keyword">BY</span> <span class="hljs-string">&#x27;[密码]&#x27;</span> <span class="hljs-keyword">WITH</span> <span class="hljs-keyword">GRANT</span> OPTION;<br><span class="hljs-comment">-- 重载授权表</span><br>FLUSH PRIVILEGES;<br></code></pre></td></tr></table></figure>
 
-<h3 id="id-详解"><a href="#id-详解" class="headerlink" title="id 详解"></a>id 详解</h3><p>MySQL 查询的序列号，用来标识 MySQL 操作表或者子查询的顺序。  </p>
-<p><img src="http://images.zabbix.store/markdown/image-20220819170632118.png?markdown" srcset="/img/loading.gif" lazyload alt="image-20220819170632118"></p>
+<h3 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h3><p>可能会报异常</p>
+<blockquote>
+<p>1819 - Your password does not satisfy the current policy requirements</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-comment">-- 默认值为1, 密码强度等级 [LOW:0| MEDIUM:1 | STRONG:2]</span><br><span class="hljs-keyword">set</span> <span class="hljs-keyword">global</span> validate_password_policy<span class="hljs-operator">=</span><span class="hljs-number">0</span>;<br><span class="hljs-comment">-- 默认为8，限制密码长度的最小字符数</span><br><span class="hljs-keyword">set</span> <span class="hljs-keyword">global</span> validate_password_length<span class="hljs-operator">=</span><span class="hljs-number">1</span>;<br><span class="hljs-keyword">SHOW</span> VARIABLES <span class="hljs-keyword">LIKE</span> <span class="hljs-string">&#x27;validate_password%&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>修改密码</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs sql">mysql<span class="hljs-operator">&gt;</span> <span class="hljs-keyword">update</span> mysql.user <span class="hljs-keyword">set</span> authentication_string<span class="hljs-operator">=</span>password(<span class="hljs-string">&#x27;root&#x27;</span>) <span class="hljs-keyword">where</span> <span class="hljs-keyword">user</span><span class="hljs-operator">=</span><span class="hljs-string">&#x27;root&#x27;</span>;<br>Query OK, <span class="hljs-number">1</span> <span class="hljs-type">row</span> affected (<span class="hljs-number">0.01</span> sec)<br><span class="hljs-keyword">Rows</span> matched: <span class="hljs-number">1</span>  Changed: <span class="hljs-number">1</span>  Warnings: <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>初始化设置密码</p>
+<p>You must reset your password using ALTER USER statement before executing this statement</p>
+</blockquote>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sql"><span class="hljs-keyword">set</span> password <span class="hljs-operator">=</span> password(<span class="hljs-string">&#x27;root&#x27;</span>);<br></code></pre></td></tr></table></figure>
 
                 
               </div>
@@ -294,6 +303,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/MySQL/" class="category-chain-item">MySQL</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/MySQL/" class="print-no-link">#MySQL</a>
+      
+    </div>
   
 </div>
 
@@ -303,8 +340,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
-      <div>https://cuifuan.github.io/2022/08/19/database/MySQL优化/</div>
+      <div>MySQL 基础笔记</div>
+      <div>https://cuifuan.github.io/2023/03/01/database/mysql-base/</div>
     </div>
     <div class="license-meta">
       
@@ -316,7 +353,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年8月19日</div>
+          <div>2023年3月1日</div>
         </div>
       
       
@@ -348,9 +385,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2023/01/01/back-end/utils/use-jackson/" title="抛弃 Fastjson 拥抱 Jackson">
+                      <a href="/2023/04/01/database/mysql-master-slave/" title="MySQL 8.0 主从复制详解与实践">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">抛弃 Fastjson 拥抱 Jackson</span>
+                        <span class="hidden-mobile">MySQL 8.0 主从复制详解与实践</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -358,8 +395,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2022/08/18/back-end/middleware/RocketMQ%E9%9B%86%E7%BE%A4%E6%90%AD%E5%BB%BA/" title="">
-                        <span class="hidden-mobile"></span>
+                      <a href="/2023/03/01/linux/ubuntu-remote-login/" title="Ubuntu 服务器配置远程登录">
+                        <span class="hidden-mobile">Ubuntu 服务器配置远程登录</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

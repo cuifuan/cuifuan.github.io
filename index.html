@@ -182,7 +182,7 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+     style="background: url('/img/ban.jpg') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
@@ -354,13 +354,13 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2023/04/01/database/MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" target="_self">
+        <a href="/2023/04/01/database/mysql-master-slave/" target="_self">
           MySQL 8.0 主从复制详解与实践
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/04/01/database/MySQL%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/04/01/database/mysql-master-slave/" target="_self">
         <div>
           MySQL 8.0 主从复制详解与实践1. 简介MySQL 8.0 提供了强大的主从复制功能，允许将数据从一个服务器同步到另一个服务器，以实现数据备份、高可用性和读写分离等优势。本文将深入探讨 MySQL 8.0 主从复制的原理、配置和实践，带你一步步实现主从复制的设置。 2. 什么是主从复制？基本概念 数据库主从复制基于主从关系，其中一个数据库被定义为主数据库（Master），而另一个被定义为从
         </div>
@@ -417,15 +417,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2023/03/01/database/Ubuntu-intsall-mysql8/" target="_self">
-          Ubuntu 20.04 安装 MySQL 8
+        <a href="/2023/03/01/database/mysql-base/" target="_self">
+          MySQL 基础笔记
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/03/01/database/Ubuntu-intsall-mysql8/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/03/01/database/mysql-base/" target="_self">
         <div>
-          MySQL 是最流行的开源关系数据库管理系统。 它快速，易于使用，可扩展，并且是流行的 LAMP 和 LEMP 栈的组成部分  MySQL 是最流行的开源关系数据库管理系统。它快速，易于使用，可扩展，并且是流行的LAMP和LEMP栈的组成部分。 随着 MySQL 的不断成熟，它也逐渐用于更多大规模网站和应用。本教程介绍了如何在 Ubuntu 20.04 上安装和配置 MySQL。 包括使用 ap
+          新增用户12345-- 创建用户create user [用户名] identified by &#x27;[密码]&#x27;;-- 赋予数据库权限grant all privileges on [数据库].* to [用户名]@&#x27;%&#x27; identified by &#x27;[密码]&#x27;;flush privileges;  开启远程登录权限1234-- 使用%赋予
         </div>
       </a>
 
@@ -465,130 +465,6 @@
             <i class="iconfont icon-tags"></i>
             
               <a href="/tags/MySQL/">#MySQL</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2023/03/01/back-end/java-base/java_reflection/" target="_self">
-          探究Java反射：解密动态获取类信息的神奇之旅
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/03/01/back-end/java-base/java_reflection/" target="_self">
-        <div>
-          探究 Java 反射：解密动态获取类信息的神奇之旅引言在 Java 编程的世界中，反射是一个强大而神奇的概念。它使得我们可以在运行时动态地获取、检查和操作类的信息，而不需要提前知道类的具体细节。本篇博客将向您展示如何使用 Java 的反射机制，探索其背后的原理，并结合代码示例阐述其实用性。 什么是 Java 反射？简单来说，Java 反射是指在运行时动态地获取类的信息以及在运行时动态地调用类的方法
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-03-01 12:20" pubdate>
-              2023-03-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Java%E5%9F%BA%E7%A1%80/" class="category-chain-item">Java基础</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Java/">#Java</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h2 class="index-header">
-        
-        <a href="/2023/03/01/back-end/plugins/mybatis-plus/" target="_self">
-          使用Spring Boot与MyBatis Plus快速构建应用
-        </a>
-      </h2>
-
-      
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/03/01/back-end/plugins/mybatis-plus/" target="_self">
-        <div>
-          【Java 系列】使用 Spring Boot 与 MyBatis Plus 快速构建应用引言Spring Boot 和 MyBatis Plus 是当今 Java 开发领域中的主流框架。Spring Boot 简化了 Java 应用程序的开发流程，MyBatis Plus 则是 MyBatis 框架的增强版本，提供了更多便利的功能, 例如集成了很多初始增删改查的方法。本篇入门博客将引导你如何使用
-        </div>
-      </a>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2023-03-01 12:20" pubdate>
-              2023-03-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3 d-flex align-items-center">
-            <i class="iconfont icon-category"></i>
-            
-
-<span class="category-chains">
-  
-  
-    
-      <span class="category-chain">
-        
-  <a href="/categories/Spring-Boot/" class="category-chain-item">Spring Boot</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Java/">#Java</a>
-            
-              <a href="/tags/Spring-Boot/">#Spring Boot</a>
             
           </div>
         
@@ -667,15 +543,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2023/03/01/back-end/java-base/java-stream/" target="_self">
-          Java Stream 详尽篇
+        <a href="/2023/03/01/database/Ubuntu-intsall-mysql8/" target="_self">
+          Ubuntu 20.04 安装 MySQL 8
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/03/01/back-end/java-base/java-stream/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/03/01/database/Ubuntu-intsall-mysql8/" target="_self">
         <div>
-          1.Stream API 介绍Java8 版本引入的重要特性之一, 对于集合（例如 List、Map、Set 等）进行处理和操作的高级抽象.Stream API 提供了一种更为简洁高效的的方式来处理集合数据, 可读性较高, 特别在数据的过滤、转换、聚合时的操作很简单方便快捷. 1.1 特点与优势 函数式风格: Stream API 使用函数式接口和 Lambda 表达式, 让代码更具表达力和简洁性
+          MySQL 是最流行的开源关系数据库管理系统。 它快速，易于使用，可扩展，并且是流行的 LAMP 和 LEMP 栈的组成部分  MySQL 是最流行的开源关系数据库管理系统。它快速，易于使用，可扩展，并且是流行的LAMP和LEMP栈的组成部分。 随着 MySQL 的不断成熟，它也逐渐用于更多大规模网站和应用。本教程介绍了如何在 Ubuntu 20.04 上安装和配置 MySQL。 包括使用 ap
         </div>
       </a>
 
@@ -699,7 +575,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/Java-%E8%BF%9B%E9%98%B6/" class="category-chain-item">Java 进阶</a>
+  <a href="/categories/MySQL/" class="category-chain-item">MySQL</a>
   
   
 
@@ -714,9 +590,7 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Java/">#Java</a>
-            
-              <a href="/tags/Stream/">#Stream</a>
+              <a href="/tags/MySQL/">#MySQL</a>
             
           </div>
         
@@ -791,15 +665,15 @@
     <article class="col-12 col-md-12 mx-auto index-info">
       <h2 class="index-header">
         
-        <a href="/2023/02/01/back-end/design-pattern/abstract-factory/" target="_self">
-          深入解析Java抽象工厂模式
+        <a href="/2023/03/01/back-end/design-pattern/strategic-pattern/" target="_self">
+          【Java 设计模式】策略模式
         </a>
       </h2>
 
       
-      <a class="index-excerpt index-excerpt__noimg" href="/2023/02/01/back-end/design-pattern/abstract-factory/" target="_self">
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/03/01/back-end/design-pattern/strategic-pattern/" target="_self">
         <div>
-          深入解析 Java 抽象工厂模式：创建跨平台图形绘制工具的设计与实现抽象工厂模式（Abstract Factory Pattern）是 Java 中一种常用的设计模式，它属于创建型模式的一种。该模式提供了一种创建一系列相关或相互依赖对象的接口，而无需指定具体实现类。在本文中，我们将详细介绍抽象工厂模式的概念、实现方法以及应用场景。 1. 抽象工厂模式概述抽象工厂模式是一种创建型模式，旨在为一组相关
+          1.前言在此篇文章，我们将看看如何在 Java 8 中实现策略设计模式。 首先，我们将概述该模式，并解释传统上它是如何在旧版本的 Java 中实现的。 接下来，我们将再次尝试该模式，只是这次使用 Java 8 lambda，减少了代码的冗长。 2.策略模式本质上，策略模式允许我们在运行时改变算法的行为。 通常，我们会从一个用于应用算法的接口开始，然后为每个可能的算法多次实现它。 假设我们需要根据是
         </div>
       </a>
 
@@ -807,8 +681,8 @@
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2023-02-01 19:20" pubdate>
-              2023-02-01
+            <time datetime="2023-03-01 12:20" pubdate>
+              2023-03-01
             </time>
           </div>
         
@@ -838,9 +712,129 @@
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E5%90%8E%E7%AB%AF/">#后端</a>
+              <a href="/tags/Java-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">#Java 设计模式</a>
             
-              <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">#设计模式</a>
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2023/03/01/back-end/plugins/mybatis-plus/" target="_self">
+          使用Spring Boot与MyBatis Plus快速构建应用
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/03/01/back-end/plugins/mybatis-plus/" target="_self">
+        <div>
+          【Java 系列】使用 Spring Boot 与 MyBatis Plus 快速构建应用引言Spring Boot 和 MyBatis Plus 是当今 Java 开发领域中的主流框架。Spring Boot 简化了 Java 应用程序的开发流程，MyBatis Plus 则是 MyBatis 框架的增强版本，提供了更多便利的功能, 例如集成了很多初始增删改查的方法。本篇入门博客将引导你如何使用
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-03-01 12:20" pubdate>
+              2023-03-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Spring-Boot/" class="category-chain-item">Spring Boot</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Java/">#Java</a>
+            
+              <a href="/tags/Spring-Boot/">#Spring Boot</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h2 class="index-header">
+        
+        <a href="/2023/03/01/back-end/java-base/java_reflection/" target="_self">
+          探究Java反射：解密动态获取类信息的神奇之旅
+        </a>
+      </h2>
+
+      
+      <a class="index-excerpt index-excerpt__noimg" href="/2023/03/01/back-end/java-base/java_reflection/" target="_self">
+        <div>
+          探究 Java 反射：解密动态获取类信息的神奇之旅引言在 Java 编程的世界中，反射是一个强大而神奇的概念。它使得我们可以在运行时动态地获取、检查和操作类的信息，而不需要提前知道类的具体细节。本篇博客将向您展示如何使用 Java 的反射机制，探索其背后的原理，并结合代码示例阐述其实用性。 什么是 Java 反射？简单来说，Java 反射是指在运行时动态地获取类的信息以及在运行时动态地调用类的方法
+        </div>
+      </a>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2023-03-01 12:20" pubdate>
+              2023-03-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3 d-flex align-items-center">
+            <i class="iconfont icon-category"></i>
+            
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Java%E5%9F%BA%E7%A1%80/" class="category-chain-item">Java基础</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
             
               <a href="/tags/Java/">#Java</a>
             

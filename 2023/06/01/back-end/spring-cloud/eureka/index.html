@@ -16,21 +16,23 @@
   <meta name="author" content="cuifuan">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Spring Cloud Eureka 组件:服务的注册与发现为什么需要服务注册？假如A服务调用B服务，在正常情况下，我们会在java代码中写一个Get或者Post请求，但这个时候我们请求的url固定写死的，假如URL为http:127.0.0.1:8888&#x2F;api&#x2F;user 那么如果B服务做了负载均衡或者动了端口，我们就需要更改代码中写死的URL，后续还要做重复打包上线这些无用功 现在我们使用E">
+    <meta name="description" content="Spring Cloud Eureka 组件:服务的注册与发现为什么需要服务注册？假如 A 服务调用 B 服务，在正常情况下，我们会在 java 代码中写一个 Get 或者 Post 请求，但这个时候我们请求的 url 固定写死的，假如 URL 为http:127.0.0.1:8888&#x2F;api&#x2F;user 那么如果 B 服务做了负载均衡或者动了端口，我们就需要更改代码中写死的 URL，后续还要做重复">
 <meta property="og:type" content="article">
-<meta property="og:title" content="崔先生的笔记">
-<meta property="og:url" content="https://cuifuan.github.io/2022/01/29/back-end/spring-cloud/eureka/index.html">
+<meta property="og:title" content="Spring Cloud Eureka 组件:服务的注册与发现">
+<meta property="og:url" content="https://cuifuan.github.io/2023/06/01/back-end/spring-cloud/eureka/index.html">
 <meta property="og:site_name" content="崔先生的笔记">
-<meta property="og:description" content="Spring Cloud Eureka 组件:服务的注册与发现为什么需要服务注册？假如A服务调用B服务，在正常情况下，我们会在java代码中写一个Get或者Post请求，但这个时候我们请求的url固定写死的，假如URL为http:127.0.0.1:8888&#x2F;api&#x2F;user 那么如果B服务做了负载均衡或者动了端口，我们就需要更改代码中写死的URL，后续还要做重复打包上线这些无用功 现在我们使用E">
+<meta property="og:description" content="Spring Cloud Eureka 组件:服务的注册与发现为什么需要服务注册？假如 A 服务调用 B 服务，在正常情况下，我们会在 java 代码中写一个 Get 或者 Post 请求，但这个时候我们请求的 url 固定写死的，假如 URL 为http:127.0.0.1:8888&#x2F;api&#x2F;user 那么如果 B 服务做了负载均衡或者动了端口，我们就需要更改代码中写死的 URL，后续还要做重复">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://images.zabbix.store/images/image-20220128124531953.png">
 <meta property="og:image" content="http://images.zabbix.store/images/image-20220128124650926.png">
 <meta property="og:image" content="http://images.zabbix.store/images/image-20220128234732497.png">
 <meta property="og:image" content="http://images.zabbix.store/images/image-20220129160324618.png">
 <meta property="og:image" content="http://images.zabbix.store/images/image-20220129160437402.png">
-<meta property="article:published_time" content="2022-01-29T08:05:13.000Z">
-<meta property="article:modified_time" content="2022-01-29T08:05:13.000Z">
+<meta property="article:published_time" content="2023-06-01T04:20:00.000Z">
+<meta property="article:modified_time" content="2023-08-22T02:16:29.686Z">
 <meta property="article:author" content="cuifuan">
+<meta property="article:tag" content="Spring Cloud">
+<meta property="article:tag" content="Eureka">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="http://images.zabbix.store/images/image-20220128124531953.png">
   
@@ -38,7 +40,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>崔先生的笔记</title>
+  <title>Spring Cloud Eureka 组件:服务的注册与发现 - 崔先生的笔记</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -204,7 +206,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text=""></span>
+            <span id="subtitle" data-typed-text="Spring Cloud Eureka 组件:服务的注册与发现"></span>
           
         </div>
 
@@ -215,8 +217,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2022-01-29 16:05" pubdate>
-          2022年1月29日 下午
+        <time datetime="2023-06-01 12:20" pubdate>
+          2023年6月1日 中午
         </time>
       </span>
     
@@ -275,45 +277,45 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header"></h1>
+            <h1 id="seo-header">Spring Cloud Eureka 组件:服务的注册与发现</h1>
             
             
               <div class="markdown-body">
                 
-                <h1 id="Spring-Cloud-Eureka-组件-服务的注册与发现"><a href="#Spring-Cloud-Eureka-组件-服务的注册与发现" class="headerlink" title="Spring Cloud Eureka 组件:服务的注册与发现"></a>Spring Cloud Eureka 组件:服务的注册与发现</h1><h2 id="为什么需要服务注册？"><a href="#为什么需要服务注册？" class="headerlink" title="为什么需要服务注册？"></a>为什么需要服务注册？</h2><p>假如A服务调用B服务，在正常情况下，我们会在java代码中写一个Get或者Post请求，但这个时候我们请求的url固定写死的，假如URL为<code>http:127.0.0.1:8888/api/user</code></p>
-<p>那么如果B服务做了负载均衡或者动了端口，我们就需要更改代码中写死的URL，后续还要做重复打包上线这些无用功</p>
-<p>现在我们使用Eureka后，把所有的服务放在一个池子里面，当B服务注册在池子里面，并且给定一个服务名称B-Service，那么无论B服务是更改端口，或是做负载均衡，A服务是根据B服务的名字B-Service进行请求的</p>
-<p>因此我们需要服务注册，同时A能拉取服务列表，也就说明在服务注册后，其他服务可以发现此服务，就是服务发现。</p>
+                <h1 id="Spring-Cloud-Eureka-组件-服务的注册与发现"><a href="#Spring-Cloud-Eureka-组件-服务的注册与发现" class="headerlink" title="Spring Cloud Eureka 组件:服务的注册与发现"></a>Spring Cloud Eureka 组件:服务的注册与发现</h1><h2 id="为什么需要服务注册？"><a href="#为什么需要服务注册？" class="headerlink" title="为什么需要服务注册？"></a>为什么需要服务注册？</h2><p>假如 A 服务调用 B 服务，在正常情况下，我们会在 java 代码中写一个 Get 或者 Post 请求，但这个时候我们请求的 url 固定写死的，假如 URL 为<code>http:127.0.0.1:8888/api/user</code></p>
+<p>那么如果 B 服务做了负载均衡或者动了端口，我们就需要更改代码中写死的 URL，后续还要做重复打包上线这些无用功</p>
+<p>现在我们使用 Eureka 后，把所有的服务放在一个池子里面，当 B 服务注册在池子里面，并且给定一个服务名称 B-Service，那么无论 B 服务是更改端口，或是做负载均衡，A 服务是根据 B 服务的名字 B-Service 进行请求的</p>
+<p>因此我们需要服务注册，同时 A 能拉取服务列表，也就说明在服务注册后，其他服务可以发现此服务，就是服务发现。</p>
 <p>注册服务的一方是<strong>服务提供者</strong>，而调用其他服务的接口的则是<strong>服务消费者</strong>，两者是相对的。</p>
-<p>同时，一个服务可以是服务提供者，又可以是服务消费者，关键是以谁为参照物。例如A服务调用B服务，B服务又去调用了C服务接口，那么B服务相对于A来说就是服务提供者，相对于C服务来说就是服务消费者。</p>
+<p>同时，一个服务可以是服务提供者，又可以是服务消费者，关键是以谁为参照物。例如 A 服务调用 B 服务，B 服务又去调用了 C 服务接口，那么 B 服务相对于 A 来说就是服务提供者，相对于 C 服务来说就是服务消费者。</p>
 <h2 id="新建一个-Eureka-Server-服务端"><a href="#新建一个-Eureka-Server-服务端" class="headerlink" title="新建一个 Eureka Server 服务端"></a>新建一个 Eureka Server 服务端</h2><h3 id="创建一个-Spring-Boot-项目"><a href="#创建一个-Spring-Boot-项目" class="headerlink" title="创建一个 Spring Boot 项目"></a>创建一个 Spring Boot 项目</h3><p><img src="http://images.zabbix.store/images/image-20220128124531953.png" srcset="/img/loading.gif" lazyload alt="image-20220128124531953"></p>
-<p>点击下一步，搜索依赖<code>eureka</code> 然后选择 eureka-server  </p>
+<p>点击下一步，搜索依赖<code>eureka</code> 然后选择 eureka-server</p>
 <p><img src="http://images.zabbix.store/images/image-20220128124650926.png" srcset="/img/loading.gif" lazyload alt="image-20220128124650926"></p>
-<p>点击 Finish  </p>
+<p>点击 Finish</p>
 <p>使用全文搜索 <strong>SpringBootApplication</strong>，然后在其上增加一行注解 <strong>@EnableEurekaServer</strong></p>
-<p>代码如下：  </p>
+<p>代码如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@EnableEurekaServer</span> 激活注册中心，激活相关配置</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@EnableEurekaServer</span><br><span class="hljs-meta">@SpringBootApplication</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">GenshinEurekaApplication</span> &#123;<br></code></pre></td></tr></table></figure>
 
-<p>配置文件 <strong>application.properties</strong>   </p>
+<p>配置文件 <strong>application.properties</strong></p>
 <figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-comment"># 项目端口</span><br><span class="hljs-attr">server.port</span>=<span class="hljs-string">9001</span><br><span class="hljs-comment"># 设置该服务注册中心的hostname</span><br><span class="hljs-attr">eureka.instance.hostname</span>=<span class="hljs-string">localhost</span><br><span class="hljs-comment"># 由于我们目前创建的应用是一个服务注册中心，而不是普通的应用，默认情况下</span><br><span class="hljs-comment"># 这个应用会向注册中心(也是它自己)注册它自己，设置为false表示禁止这种自己向自己注册的默认行为</span><br><span class="hljs-attr">eureka.client.register-with-eureka</span>=<span class="hljs-string">false</span><br><span class="hljs-comment"># 表示不去从服务端检索其他服务信息，因为自己就是服务端</span><br><span class="hljs-comment"># 服务注册中心本身的职责就是维护服务实例，它不需要去检索其他服务</span><br><span class="hljs-attr">eureka.client.fetch-registry</span>=<span class="hljs-string">false</span><br><span class="hljs-comment"># 指定服务注册中心的位置</span><br><span class="hljs-attr">eureka.client.service-url.defaultZone</span>=<span class="hljs-string">http://localhost:9001/eureka</span><br></code></pre></td></tr></table></figure>
 
-<p>启动此应用，然后在浏览器访问<a target="_blank" rel="noopener" href="http://localhost:9001/">http://localhost:9001</a>即可看到项目的web窗口显示  </p>
+<p>启动此应用，然后在浏览器访问<a target="_blank" rel="noopener" href="http://localhost:9001/">http://localhost:9001</a>即可看到项目的 web 窗口显示</p>
 <p><img src="http://images.zabbix.store/images/image-20220128234732497.png" srcset="/img/loading.gif" lazyload alt="image-20220128234732497"></p>
-<h2 id="eureka实现高可用"><a href="#eureka实现高可用" class="headerlink" title="eureka实现高可用"></a>eureka实现高可用</h2><p>修改电脑的<strong>hosts</strong>文件</p>
+<h2 id="eureka-实现高可用"><a href="#eureka-实现高可用" class="headerlink" title="eureka 实现高可用"></a>eureka 实现高可用</h2><p>修改电脑的<strong>hosts</strong>文件</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">sudo vim /etc/hosts<br></code></pre></td></tr></table></figure>
 
 <p>增加</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">127.0.0.1 shanghai<br>127.0.0.1 beijing<br></code></pre></td></tr></table></figure>
 
-<p>然后<strong>application.properties</strong>配置文件的内容如下：  </p>
+<p>然后<strong>application.properties</strong>配置文件的内容如下：</p>
 <figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">spring.application.name</span>=<span class="hljs-string">eureka-server</span><br><span class="hljs-comment"># 项目端口</span><br><span class="hljs-attr">server.port</span>=<span class="hljs-string">9001</span><br><span class="hljs-comment"># 设置该服务注册中心的hostname</span><br><span class="hljs-attr">eureka.instance.hostname</span>=<span class="hljs-string">beijing</span><br><span class="hljs-attr">eureka.client.register-with-eureka</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">eureka.client.fetch-registry</span>=<span class="hljs-string">true</span><br><span class="hljs-comment"># 指定服务注册中心的位置</span><br><span class="hljs-attr">eureka.client.service-url.defaultZone</span>=<span class="hljs-string">http://shanghai:9002/eureka/</span><br></code></pre></td></tr></table></figure>
 
 <p><strong>application-sh.properties</strong>配置文件如下</p>
 <figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs properties"><span class="hljs-attr">spring.application.name</span>=<span class="hljs-string">eureka-server</span><br><span class="hljs-comment"># 项目端口</span><br><span class="hljs-attr">server.port</span>=<span class="hljs-string">9002</span><br><span class="hljs-comment"># 设置该服务注册中心的hostname</span><br><span class="hljs-attr">eureka.instance.hostname</span>=<span class="hljs-string">shanghai</span><br><span class="hljs-attr">eureka.client.register-with-eureka</span>=<span class="hljs-string">true</span><br><span class="hljs-attr">eureka.client.fetch-registry</span>=<span class="hljs-string">true</span><br><span class="hljs-comment"># 指定服务注册中心的位置</span><br><span class="hljs-attr">eureka.client.service-url.defaultZone</span>=<span class="hljs-string">http://beijing:9001/eureka/</span><br></code></pre></td></tr></table></figure>
 
-<p>启动完成默认的eureka之后，修改启动配置项如下</p>
+<p>启动完成默认的 eureka 之后，修改启动配置项如下</p>
 <p><img src="http://images.zabbix.store/images/image-20220129160324618.png" srcset="/img/loading.gif" lazyload alt="image-20220129160324618"></p>
-<p>启动完成以后，可以在eureka控制面板看到如下内容</p>
+<p>启动完成以后，可以在 eureka 控制面板看到如下内容</p>
 <p><img src="http://images.zabbix.store/images/image-20220129160437402.png" srcset="/img/loading.gif" lazyload alt="image-20220129160437402"></p>
 <p>源代码在下面地址：</p>
 <p><a href=""></a></p>
@@ -325,6 +327,36 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/Spring-Cloud/" class="category-chain-item">Spring Cloud</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/Spring-Cloud/" class="print-no-link">#Spring Cloud</a>
+      
+        <a href="/tags/Eureka/" class="print-no-link">#Eureka</a>
+      
+    </div>
   
 </div>
 
@@ -334,8 +366,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div></div>
-      <div>https://cuifuan.github.io/2022/01/29/back-end/spring-cloud/eureka/</div>
+      <div>Spring Cloud Eureka 组件:服务的注册与发现</div>
+      <div>https://cuifuan.github.io/2023/06/01/back-end/spring-cloud/eureka/</div>
     </div>
     <div class="license-meta">
       
@@ -347,7 +379,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2022年1月29日</div>
+          <div>2023年6月1日</div>
         </div>
       
       
@@ -379,18 +411,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2022/01/29/linux/soft/Linux%E4%B8%8BRedis%E5%AE%89%E8%A3%85%E5%92%8C%E9%83%A8%E7%BD%B2/" title="">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile"></span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/08/26/software-install/%E5%B8%B8%E7%94%A8%E8%BD%AF%E4%BB%B6/" title="">
-                        <span class="hidden-mobile"></span>
+                      <a href="/2023/05/01/back-end/spring-cloud/nacos-register-discover/" title="Spring Cloud Nacos 微服务的注册与发现">
+                        <span class="hidden-mobile">Spring Cloud Nacos 微服务的注册与发现</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
